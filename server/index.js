@@ -404,10 +404,18 @@ app.get('/admin', (req, res) => {
     res.send('<h1>Ошибка загрузки данных</h1><p>' + error.message + '</p>');
   }
 });
-
-// ===================== ЗАПУСК СЕРВЕРА =====================
 app.listen(PORT, () => {
-  console.log('='.repeat(60));
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Все GET запросы, которые не обработаны выше, отдаём index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+  
+// ===================== ЗАПУСК СЕРВЕРА =====================
+console.log('='.repeat(60));
   console.log(' СЕРВЕР ИНЖКАПСТРОЙ ЗАПУЩЕН!');
   console.log('='.repeat(60));
   console.log(` Главная страница: http://localhost:${PORT}`);
@@ -415,7 +423,7 @@ app.listen(PORT, () => {
   console.log(`API проверка: http://localhost:${PORT}/api/health`);
   console.log(` Формы: POST http://localhost:${PORT}/api/contact`);
   console.log('='.repeat(60));
-  console.log(`Фронтенд (React): http://localhost:5173`);
+  console.log(`Фронтенд (React): http://localhost:${PORT}`);
   console.log('='.repeat(60));
   console.log('\n Заявки сохраняются в:', applicationsFile);
   console.log('='.repeat(60));
